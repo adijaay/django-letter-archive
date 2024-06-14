@@ -12,19 +12,19 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.CreateModel(
-            name='Instansi',
-            fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('nama_instansi', models.CharField(max_length=255)),
-                ('kategori', models.CharField(choices=[('swasta', 'Swasta'), ('pemerintah', 'Pemerintah')], max_length=255)),
-                ('telepon', models.CharField(blank=True, max_length=255, null=True)),
-                ('kode_pos', models.CharField(blank=True, max_length=255, null=True)),
-                ('alamat', models.TextField(blank=True, null=True)),
-                ('created', models.DateTimeField(auto_now_add=True)),
-                ('updated', models.DateTimeField(auto_now=True)),
-            ],
-        ),
+        # migrations.CreateModel(
+        #     name='Instansi',
+        #     fields=[
+        #         ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+        #         ('nama_instansi', models.CharField(max_length=255)),
+        #         ('kategori', models.CharField(choices=[('swasta', 'Swasta'), ('pemerintah', 'Pemerintah')], max_length=255)),
+        #         ('telepon', models.CharField(blank=True, max_length=255, null=True)),
+        #         ('kode_pos', models.CharField(blank=True, max_length=255, null=True)),
+        #         ('alamat', models.TextField(blank=True, null=True)),
+        #         ('created', models.DateTimeField(auto_now_add=True)),
+        #         ('updated', models.DateTimeField(auto_now=True)),
+        #     ],
+        # ),
         migrations.CreateModel(
             name='Surat',
             fields=[
@@ -34,16 +34,17 @@ class Migration(migrations.Migration):
                 ('perihal', models.CharField(max_length=255)),
                 ('pengirim', models.CharField(blank=True, help_text='Orang atau jasa yang mengantar surat', max_length=255, null=True)),
                 ('deskripsi', models.TextField(blank=True, null=True)),
+                ('file_path', models.FileField(blank=True, null=True))
             ],
         ),
         migrations.CreateModel(
             name='SuratKeluar',
             fields=[
                 ('surat_ptr', models.OneToOneField(auto_created=True, on_delete=django.db.models.deletion.CASCADE, parent_link=True, primary_key=True, serialize=False, to='surat_menyurat.Surat')),
+                ('status', models.CharField(max_length=255, choices=[('Baru Masuk', 'Masuk'),('Diproses ke Kepala Dinas', 'Diproses ke Kepala Dinas'),('Diproses ke Sekretaris Dinas', 'Diproses ke Sekretaris Dinas'),('Diproses bidang terkait', 'Diproses Bidang Terkait')])),
                 ('tgl_keluar', models.CharField(help_text='Tanggal keluar surat dari kantor', max_length=255, verbose_name='Tanggal keluar')),
                 ('created', models.DateTimeField(auto_now_add=True)),
                 ('updated', models.DateTimeField(auto_now=True)),
-                ('tujuan_instansi', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='surat_menyurat.Instansi')),
             ],
             bases=('surat_menyurat.surat',),
         ),
@@ -52,9 +53,9 @@ class Migration(migrations.Migration):
             fields=[
                 ('surat_ptr', models.OneToOneField(auto_created=True, on_delete=django.db.models.deletion.CASCADE, parent_link=True, primary_key=True, serialize=False, to='surat_menyurat.Surat')),
                 ('tgl_masuk', models.CharField(help_text='Tanggal masuk surat ke kantor', max_length=255, verbose_name='Tanggal masuk')),
+                ('status', models.CharField(max_length=255, choices=[('Sudah Dikirim', 'Sudah Dikirim'),('Diproses ke Kepala Dinas', 'Diproses ke Kepala Dinas'),('Diproses ke Sekretaris Dinas', 'Diproses ke Sekretaris Dinas'),('Diproses bidang terkait', 'Diproses Bidang Terkait')])),
                 ('created', models.DateTimeField(auto_now_add=True)),
                 ('updated', models.DateTimeField(auto_now=True)),
-                ('asal_instansi', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='surat_menyurat.Instansi')),
             ],
             bases=('surat_menyurat.surat',),
         ),

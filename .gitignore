@@ -4,3 +4,5 @@ venv
 siteenv
 newenv
 .vscode
+
+./media

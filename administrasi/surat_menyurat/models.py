@@ -1,22 +1,5 @@
 from django.db import models
-from django.utils.translation import ugettext_lazy as _
-
-class Instansi(models.Model):
-  KATEGORI_INSTANSI = (
-    ('swasta', 'Swasta'),
-    ('pemerintah', 'Pemerintah'),
-  )
-
-  nama_instansi = models.CharField(max_length=255, blank=False, null=False)
-  kategori      = models.CharField(max_length=255, choices=KATEGORI_INSTANSI)
-  telepon       = models.CharField(max_length=255, blank=True, null=True)
-  kode_pos      = models.CharField(max_length=255, blank=True, null=True)
-  alamat        = models.TextField(blank=True, null=True)
-  created       = models.DateTimeField(auto_now=False, auto_now_add=True)
-  updated       = models.DateTimeField(auto_now=True, auto_now_add=False)
-
-  def __str__(self):
-    return self.nama_instansi
+from django.utils.translation import gettext_lazy as _
 
 class Surat(models.Model):
   nomor         = models.CharField(max_length=255, blank=False, null=False)
@@ -29,16 +12,20 @@ class Surat(models.Model):
                   help_text=_('Orang atau jasa yang mengantar surat'),
                   max_length=255, blank=True, null=True)
   deskripsi     = models.TextField(blank=True, null=True)
+  file_path     = models.FileField(blank=True, null=True, upload_to='surat_menyurat/medias/')
 
 class SuratMasuk(Surat):
-  asal_instansi = models.ForeignKey(
-                  Instansi,
-                  help_text=_('Jika asal instansi tidak ada, silahkan ke menu instansi'),
-                  on_delete=models.CASCADE)
+  STATUS_MASUK = (
+    ('Baru Masuk', 'Masuk'),
+    ('Diproses ke Kepala Dinas', 'Diproses ke Kepala Dinas'),
+    ('Diproses ke Sekretaris Dinas', 'Diproses ke Sekretaris Dinas'),
+    ('Diproses bidang terkait', 'Diproses Bidang Terkait'),
+  )
   tgl_masuk     = models.CharField(
                   _("Tanggal masuk"),
                   help_text=_('Tanggal masuk surat ke kantor'),
                   max_length=255, blank=False, null=False)
+  status        = models.CharField(max_length=255, choices=STATUS_MASUK)
   created       = models.DateTimeField(auto_now=False, auto_now_add=True)
   updated       = models.DateTimeField(auto_now=True, auto_now_add=False)
 
@@ -46,14 +33,17 @@ class SuratMasuk(Surat):
     return self.nomor
 
 class SuratKeluar(Surat):
-  tujuan_instansi   = models.ForeignKey(
-                      Instansi,
-                      help_text=_('Jika tujuan instansi tidak ada, silahkan ke menu instansi'),
-                      on_delete=models.CASCADE)
+  STATUS_KELUAR = (
+    ('Sudah Dikirim', 'Sudah Dikirim'),
+    ('Diproses ke Kepala Dinas', 'Diproses ke Kepala Dinas'),
+    ('Diproses ke Sekretaris Dinas', 'Diproses ke Sekretaris Dinas'),
+    ('Diproses bidang terkait', 'Diproses Bidang Terkait'),
+  )
   tgl_keluar        = models.CharField(
                       _("Tanggal keluar"),
                       help_text=_('Tanggal keluar surat dari kantor'),
                       max_length=255, blank=False, null=False)
+  status            = models.CharField(max_length=255, choices=STATUS_KELUAR)
   created           = models.DateTimeField(auto_now=False, auto_now_add=True)
   updated           = models.DateTimeField(auto_now=True, auto_now_add=False)
 

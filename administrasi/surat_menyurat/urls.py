@@ -4,10 +4,10 @@ from . import views
 app_name ='surat_menyurat'
 
 urlpatterns = [
-  path('instansi/', views.instansi_list, name='instansi_list'),
-  path('instansiform/', views.instansi_new, name='instansi_form'),
-  path('instansidelete/<int:id>', views.instansi_delete, name='instansi_delete'),
-  path('instansiedit/<int:id>', views.instansi_edit, name='instansi_edit'),
+  path('arsipsuratmasuk/', views.arsip_surat_masuk_list, name='arsip_surat_masuk_list'),
+  path('arsipsuratmasukdelete/<int:id>', views.arsip_surat_masuk_delete, name='arsip_surat_masuk_delete'),
+  path('arsipsuratkeluar/', views.arsip_surat_keluar_list, name='arsip_surat_keluar_list'),
+  path('arsipsuratkeluardelete/<int:id>', views.arsip_surat_keluar_delete, name='arsip_surat_keluar_delete'),
   
   path('suratmasuk/', views.surat_masuk_list, name='surat_masuk_list'),
   path('suratmasukform/', views.surat_masuk_form, name='surat_masuk_form'),

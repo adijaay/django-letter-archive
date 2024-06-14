@@ -1,5 +1,5 @@
 from django import forms
-from surat_menyurat.models import Instansi, SuratMasuk, SuratKeluar
+from surat_menyurat.models import  SuratMasuk, SuratKeluar
 
 class FormSuratMasuk(forms.ModelForm):
   class Meta:
@@ -21,12 +21,3 @@ class FormSuratKeluar(forms.ModelForm):
     for visible in self.visible_fields():
       visible.field.widget.attrs['class'] = 'form-control'
       
-class FormInstansi(forms.ModelForm):
-  class Meta:
-    model = Instansi
-    exclude = ('id', )
-
-  def __init__(self, *args, **kwargs):
-    super(FormInstansi, self).__init__(*args, **kwargs)
-    for visible in self.visible_fields():
-      visible.field.widget.attrs['class'] = 'form-control'
